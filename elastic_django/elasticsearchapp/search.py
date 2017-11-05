@@ -5,7 +5,7 @@ from . import models
 from elasticsearch import Elasticsearch
 from elasticsearch.helpers import bulk
 
-connections.create_connection(hosts=['localhost:9200'], timeout=20)
+connections.create_connection()
 
 
 class BlogPostIndex(DocType):
@@ -22,5 +22,6 @@ def bulk_indexing():
     # initialize the model to be indexed
     BlogPostIndex.init()
     # pass Es to index the queryset from the model BlogPost as a generator
-    es = Elasticsearch()
-    bulk(client=es, actions=(blogpost.indexing() for blogpost in models.BlogPost.objects.all().iterator()))
+    client = Elasticsearch()
+    bulk(client=client, actions=(blogpost.indexing() for blogpost in models.BlogPost.objects.all().iterator()))
+
