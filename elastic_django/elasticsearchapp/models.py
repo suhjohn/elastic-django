@@ -6,10 +6,10 @@ from django.contrib.auth.models import User
 # Create your models here.
 
 # Blogpost to be indexed into ElasticSearch
-from .search import BlogPostIndex
+from .search import PostIndex
 
 
-class BlogPost(models.Model):
+class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='blogpost')
     posted_date = models.DateField(default=timezone.now)
     title = models.CharField(max_length=200)
@@ -21,10 +21,11 @@ class BlogPost(models.Model):
     # Add indexing method to BlogPost
     def indexing(self):
         """
-        returns a BlogPostIndex and gets saved to ElasticSearch.
+        returns the serialized object and gets saved to ElasticSearch.
+
         :return: BlogPostIndex
         """
-        obj = BlogPostIndex(
+        obj = PostIndex(
             meta={'id': self.id},
             author=self.author.username,
             posted_date=self.posted_date,
