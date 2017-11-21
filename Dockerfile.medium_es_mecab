@@ -67,6 +67,8 @@ RUN apt-get install curl
 # Elasticsearch folder location: /usr/share/elasticsearch
 # elasticsearch.yml location: /etc/elasticsearch/elasticsearch.yml
 
+RUN sed -i '$ a -Djava.library.path=/usr/local/lib' /etc/elasticsearch/jvm.options
+
 COPY logging.yml /usr/share/elasticsearch/config/
 COPY elasticsearch.yml /etc/elasticsearch/
-RUN service elasticsearch start
+
